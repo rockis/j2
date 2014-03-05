@@ -1,0 +1,24 @@
+<html>
+{{ test }}
+{# this is comment #}
+{% for app in apps %}
+     in loop
+     {% if ok == 1 %}
+         ok is {{ ok }}
+     {% elif ok == 2 %}
+        ok is {{ ok }}
+
+     {% else %}
+        not ok
+     {% endif %}
+     {% if loop.first %}
+     is first
+     {% endif %}
+     {% if loop.last %}
+     is last
+     {% endif %}
+     {{ loop.cycle('even', 'odd') }}
+{% endfor %}
+{% set vv = 'bb' %}
+{{ vv }}
+</html>

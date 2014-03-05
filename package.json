@@ -1,0 +1,29 @@
+{
+  "name": "j2",
+  "version": "0.0.1",
+  "description": "A fast Javascript template engine",
+  "main": "j2.js",
+  "dependencies": {},
+  "devDependencies": {
+    "jison": "0.4.x"
+  },
+  "scripts": {
+    "test": "node test/all-tests.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/rockis/j2.git"
+  },
+  "keywords": [
+    "j2",
+    "javascript",
+    "template",
+    "templates"
+  ],
+  "author": "Ray Chuang <caowuxin@sina.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rockis/j2/issues"
+  },
+  "homepage": "https://github.com/rockis/j2"
+}
