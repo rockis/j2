@@ -2,10 +2,11 @@
 
 /* lexical grammar */
 %lex
-%s for if else elif endfor endif
+%s for if else elif endfor endif raw endraw
 
 %%
-"{%"\s*"for"\s+(\w+)\s+"in"\s+(\w+)\s*"%}"	%{ 
+"{%"\s*"for"\s+(\w+)\s+"in"\s+(\w+)\s*"%}"	
+										%{ 
 												this.begin('for');
 												yy.startFor(yy_.matches[2], yy_.matches[1]);
 												return 'FOR_START'; 
@@ -20,7 +21,7 @@
 											yy.startIf(yy_.matches[1]);
 											return 'IF_START'; 
 										%}
-<if>"{%"\s*"else"\s*"%}"				%{
+<if>"{%"\s*"else"\s*("%}"|"-%}")\s*		%{
 											yy.startElse();
 											return 'ELSE_START';
 										%}
@@ -33,9 +34,23 @@
 											yy.endIf();
 											return 'IF_END';
 										%}
-"{%"\s*"set"\s+(\w+)\s*"="\s*(.*)\s*"%}"		%{
+[ ]*"{%"\s*"set"\s+(\w+)\s*"="\s*(.+)\s*"%}"[ ]*\n? 
+										%{
 											yy.setVariable(yy_.matches[1], yy_.matches[2]);
 											return 'SET';
+										%}
+"{%"\s*"raw"(.|\n)*?"%}"				
+										%{
+											this.begin('raw');
+											return 'RAW_START';
+										%}
+<raw>"{%"\s*"endraw"\s*"%}"				%{
+											this.popState(); 
+											return 'RAW_END';
+										%}
+<raw>(.|\n)								%{
+											yy.addChar(yytext);
+											return 'RAW_CHAR';
 										%}
 "{{"(.+)"}}"							%{
 											yy.expr(yy_.matches[1]);
@@ -44,7 +59,7 @@
 "{#"(.|\n)*?"#}"						return 'COMMENT'  /* J2 comment */
 (.|\n)									%{
 											yy.addChar(yytext);
-											return 'TEXT';
+											return 'CHAR';
 										%}
 <<EOF>>									return 'EOF'
 
@@ -68,12 +83,13 @@ contents
  ;
 
 content
-	: FOR
+	: RAW
+	| FOR
 	| IF
 	| EXPR
 	| SET
 	| COMMENT
-	| TEXT
+	| CHAR
  ;
 FOR
 	: FOR_START contents FOR_END
@@ -86,5 +102,12 @@ IF_BODY
 	: IF_END
 	| ELSE_START contents IF_BODY
 	| ELIF_START contents IF_BODY
+ ;
+RAW
+	: RAW_START RAW_TEXT RAW_END
+ ;
+RAW_TEXT
+	: RAW_CHAR RAW_TEXT
+	| RAW_CHAR
  ;
 %%

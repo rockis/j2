@@ -1,4 +1,4 @@
-function __Loop__(index, length) {
+function _J2Loop_(index, length) {
 	this.index = index + 1;
 	this.index0 = index;
 	this.length = length;
@@ -6,7 +6,7 @@ function __Loop__(index, length) {
 	this.last = index == length - 1;
 }
 
-__Loop__.prototype.cycle = function(even, odd) {
+_J2Loop_.prototype.cycle = function(even, odd) {
 	return this.index0 % 2 == 0 ? even : odd;
 }
 
@@ -31,7 +31,7 @@ var context = {
 		this.endText();
 		this.addScript('for (var _i = 0; _i < ' + array_name + '.length; _i++) {\n');
 		this.addScript('var ' + var_name + ' = ' + array_name + '[_i];\n');
-		this.addScript('var loop = new __Loop__(_i, ' + array_name +'.length);\n');
+		this.addScript('var loop = new _J2Loop_(_i, ' + array_name +'.length);\n');
 	},
 	endFor : function() {
 		this.endText();
@@ -80,8 +80,8 @@ var __out__ = {
 		process.stdout.write('' + text);
 	}
 }
-console.log('---------- template --------------');
-console.log(source);
+// console.log('---------- template --------------');
+// console.log(source);
 console.log('---------- html --------------');
 
 var script = context.toText();

@@ -8,7 +8,7 @@
      {% elif ok == 2 %}
         ok is {{ ok }}
 
-     {% else %}
+     {% else -%}
         not ok
      {% endif %}
      {% if loop.first %}
@@ -19,6 +19,8 @@
      {% endif %}
      {{ loop.cycle('even', 'odd') }}
 {% endfor %}
+  --
 {% set vv = 'bb' %}
-{{ vv }}
+  --
+{% raw %} {{ pp }} {% endraw %}
 </html>
